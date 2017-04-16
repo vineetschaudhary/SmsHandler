@@ -41,6 +41,13 @@ We can run the test cases using MVN test command and it needs to be run on the f
 
 # Tests
 
-Unit tests are under test folder which all the above command.
+Unit tests are under test folder.
 
+1. Integration Test<br>
+  1.1 SMSHandlerIntegrationTest <br>
+2. Unit Test Cases<br>
+  2.1 BalanceCommandUnitTest<br>
+  2.2 SendCommandUnitTest<br>
+  2.3 TotalSendCommandUnitTest<br>
+  2.4 CommandUtilTest<br>
 
