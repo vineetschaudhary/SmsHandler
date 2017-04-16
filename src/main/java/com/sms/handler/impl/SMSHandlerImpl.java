@@ -2,10 +2,10 @@ package com.sms.handler.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sms.command.BalanceCommand;
 import com.sms.command.CommandBuilder;
 import com.sms.command.SMSCommand;
 import com.sms.command.util.CommandUtil;
@@ -33,21 +33,22 @@ public class SMSHandlerImpl implements SMSHandler {
 	 */
 	@Override
 	public String handleSmsRequest(String smsContent, String senderDeviceId) {
-		if(logger.isDebugEnabled()){
-			logger.debug("Sms Content::" + smsContent + " Sender device id::" + senderDeviceId);
+		String response = null;
+		MDC.put("senderDeviceId", senderDeviceId);
+		try{
+			logger.info(String.format("Sms Content:: %s senderDeviceId:: %s",smsContent,senderDeviceId));
+			String smsCommand = response = CommandUtil.getCommand(smsContent).toUpperCase();
+			if(!ResponseStatus.ERR_UNKNOWN_COMMAND.equals(smsCommand)){
+				SMSCommand command  = commandBuilder.buildCommand(smsCommand);
+				response = command.execute(smsContent, senderDeviceId);
+			}
+			logger.debug(String.format("Returned response:: %s", response));
+			
+		}catch(Exception exception){
+			logger.error(String.format("Exception received from application:: %s", exception.getMessage()));
+		}finally{
+			MDC.remove("senderDeviceId");
 		}
-		String smsCommand = CommandUtil.getCommand(smsContent).toUpperCase();
-		if(!ResponseStatus.ERR_UNKNOWN_COMMAND.equals(smsCommand)){
-			SMSCommand command  = commandBuilder.buildCommand(smsCommand);
-			return command.execute(smsContent, senderDeviceId);
-		}
-		if(logger.isDebugEnabled()){
-			logger.debug("Returned command name from CommandUtil::getCommand::" + smsCommand);
-		}
-		return smsCommand;
-		
+		return response;
 	}
-	
-	
-
 }

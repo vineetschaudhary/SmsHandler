@@ -22,7 +22,7 @@ import com.sms.user.manager.UserManager;
  */
 @Component
 public class TotalCommand implements SMSCommand {
-	private static final Logger logger = LoggerFactory.getLogger(BalanceCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(TotalCommand.class);
 	
 	@Autowired
 	private UserManager userManager;
@@ -46,7 +46,7 @@ public class TotalCommand implements SMSCommand {
 		if(allUsersValid(recipients)){
 			String senderUsername = userManager.getUserNameForDeviceId(userDeviceId);
 			if(logger.isDebugEnabled()){
-				logger.debug("sender user name::" + senderUsername);
+				logger.debug(String.format("sender user name:: %s", senderUsername));
 			}
 			for(String recipientUsername : recipients){
 				List<BigDecimal> totalAmount = transferManager.getAllTransactions(senderUsername, recipientUsername);
@@ -66,7 +66,7 @@ public class TotalCommand implements SMSCommand {
 	private boolean allUsersValid(String[] recipients){
 		for(String recipient : recipients){
 			if(logger.isDebugEnabled()){
-				logger.debug("recipient name :: " + recipient);
+				logger.debug(String.format("recipient name :: %s", recipient));
 			}
 			if(!userManager.existsUser(recipient)){
 				return false; 

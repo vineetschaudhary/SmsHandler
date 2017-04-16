@@ -37,7 +37,7 @@ public class BalanceCommand implements SMSCommand{
 		if(userManager.existsUser(userName)){
 			BigDecimal balance = userManager.getBalance(userName);
 			if(logger.isDebugEnabled()){
-				logger.debug("Retrieved balance details:: balance::" + balance + " username::" + userName + " against sms command::" + smsCommand);
+				logger.debug(String.format("Retrieved balance details:: balance:: %s  username:: %s  against sms command:: %s", balance, userName, smsCommand));
 			}
 			return String.valueOf(balance);
 		}

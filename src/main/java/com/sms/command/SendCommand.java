@@ -19,7 +19,7 @@ import com.sms.user.manager.UserManager;
  */
 @Component
 public class SendCommand implements SMSCommand {
-	private static final Logger logger = LoggerFactory.getLogger(BalanceCommand.class);
+	private static final Logger logger = LoggerFactory.getLogger(SendCommand.class);
 	
 	@Autowired
 	private UserManager userManager;
@@ -39,21 +39,21 @@ public class SendCommand implements SMSCommand {
 	public String execute(String smsContent, String userDeviceId) {
 		String userName = userManager.getUserNameForDeviceId(userDeviceId);
 		if(logger.isDebugEnabled()){
-			logger.debug("user name returned::" + userName);
+			logger.debug(String.format("user name returned:: %s", userName));
 		}
 		String[] transferDetails = smsContent.split("-");
 		if(userManager.existsUser(userName)){
 			BigDecimal amount = new BigDecimal(transferDetails[1]);
 			BigDecimal balance = userManager.getBalance(userName);
 			if(logger.isDebugEnabled()){
-				logger.debug("requested amount to transfer::" + amount + " balance in users account::" + balance);
+				logger.debug(String.format("requested amount to transfer:: %s  balance in users account:: %s", amount, balance));
 			}
 			int comparisonResult = balance.compareTo(amount);
 			if(comparisonResult == -1){
 				return ResponseStatus.ERR_INSUFFICIENT_FUNDS;
 			}
 			if(logger.isDebugEnabled()){
-				logger.debug("requested transfer details:: recipient name :: " + transferDetails[2] + " transfer amount::" + amount);
+				logger.debug(String.format("requested transfer details:: recipient name :: %s  transfer amount:: %s", transferDetails[2], amount));
 			}
 			transferManager.sendMoney(userName, transferDetails[2], amount);
 			return ResponseStatus.OK;

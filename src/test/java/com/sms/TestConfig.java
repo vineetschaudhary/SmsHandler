@@ -48,5 +48,5 @@ public class TestConfig {
 	public CommandBuilder getCommandBuilder(){
 		return new CommandBuilder();
 	}
-	
+
 }

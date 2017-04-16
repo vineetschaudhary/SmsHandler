@@ -3,11 +3,8 @@ package com.sms.command.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import com.sms.command.BalanceCommand;
 import com.sms.constants.ResponseStatus;
 
 /**
@@ -18,14 +15,12 @@ import com.sms.constants.ResponseStatus;
  *	@since 15-04-2017
  */
 public class CommandUtil {
-	private static final Logger logger = LoggerFactory.getLogger(BalanceCommand.class);
-	
 	/**
 	 * Pattern to get the exact command name.
 	 */
-	private static StringBuffer validCommands = new StringBuffer("\\bsend")
-			.append("|\\bbalance")
-			.append("|\\btotal-sent");
+	private static StringBuffer validCommands = new StringBuffer("\\bsend\\b")
+			.append("|\\bbalance\\b")
+			.append("|\\btotal-sent\\b");
 	/**
 	 * Pattern to validate the commands.
 	 */
